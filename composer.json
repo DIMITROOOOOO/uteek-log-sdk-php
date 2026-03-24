@@ -1,0 +1,38 @@
+{
+    "name": "uteek/log-tracker-sdk",
+    "description": "PHP SDK for UTEEK Log Tracker – capture and send logs to the UTEEK Node.js backend",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["logging", "error-tracking", "monitoring", "uteek"],
+    "require": {
+        "php": ">=8.1",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0"
+    },
+    "suggest": {
+        "illuminate/support": "Required for Laravel integration (^9.0|^10.0|^11.0)",
+        "monolog/monolog": "Required for the Laravel/Symfony Monolog handler (^3.0)"
+    },
+    "autoload": {
+        "psr-4": {
+            "Uteek\\LogTracker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Uteek\\LogTracker\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Uteek\\LogTracker\\Laravel\\LogTrackerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}

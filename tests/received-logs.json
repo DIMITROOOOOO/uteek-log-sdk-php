@@ -1,0 +1,491 @@
+[
+    {
+        "level": "DEBUG",
+        "message": "Debug message",
+        "context": {
+            "detail": "test",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976723981,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:32:03+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "INFO",
+        "message": "User action",
+        "context": {
+            "action": "login",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976723984,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:32:03+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "WARNING",
+        "message": "Slow response",
+        "context": {
+            "duration_ms": 950,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976723985,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:32:03+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "ERROR",
+        "message": "DB query failed",
+        "context": {
+            "query": "SELECT *",
+            "code": 1045,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976723986,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:32:03+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "CRITICAL",
+        "message": "Out of memory",
+        "context": {
+            "limit": "128M",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976723986,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:32:03+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "ERROR",
+        "message": "Payment gateway timeout",
+        "stack_trace": "#0 {main}",
+        "context": {
+            "exception_class": "RuntimeException",
+            "file": "C:\\Users\\user\\Desktop\\pfe\\uteek-log-sdk-php\\tests\\run-test.php",
+            "line": 163,
+            "code": 504,
+            "order_id": 99,
+            "user_id": 7,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976723987,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:32:03+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "DEBUG",
+        "message": "Debug message",
+        "context": {
+            "detail": "test",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976871773,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:34:31+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "INFO",
+        "message": "User action",
+        "context": {
+            "action": "login",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976871776,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:34:31+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "WARNING",
+        "message": "Slow response",
+        "context": {
+            "duration_ms": 950,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976871777,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:34:31+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "ERROR",
+        "message": "DB query failed",
+        "context": {
+            "query": "SELECT *",
+            "code": 1045,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976871777,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:34:31+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "CRITICAL",
+        "message": "Out of memory",
+        "context": {
+            "limit": "128M",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976871777,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:34:31+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "ERROR",
+        "message": "Payment gateway timeout",
+        "stack_trace": "#0 {main}",
+        "context": {
+            "exception_class": "RuntimeException",
+            "file": "C:\\Users\\user\\Desktop\\pfe\\uteek-log-sdk-php\\tests\\run-test.php",
+            "line": 159,
+            "code": 504,
+            "order_id": 99,
+            "user_id": 7,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976871778,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:34:31+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "DEBUG",
+        "message": "Debug message",
+        "context": {
+            "detail": "test",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976918534,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:35:18+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "INFO",
+        "message": "User action",
+        "context": {
+            "action": "login",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976918537,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:35:18+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "WARNING",
+        "message": "Slow response",
+        "context": {
+            "duration_ms": 950,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976918538,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:35:18+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "ERROR",
+        "message": "DB query failed",
+        "context": {
+            "query": "SELECT *",
+            "code": 1045,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976918538,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:35:18+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "CRITICAL",
+        "message": "Out of memory",
+        "context": {
+            "limit": "128M",
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976918538,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:35:18+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    },
+    {
+        "level": "ERROR",
+        "message": "Payment gateway timeout",
+        "stack_trace": "#0 {main}",
+        "context": {
+            "exception_class": "RuntimeException",
+            "file": "C:\\Users\\user\\Desktop\\pfe\\uteek-log-sdk-php\\tests\\run-test.php",
+            "line": 159,
+            "code": 504,
+            "order_id": 99,
+            "user_id": 7,
+            "server": {
+                "php_version": "8.2.12",
+                "os": "Windows",
+                "sapi": "cli"
+            },
+            "user": {
+                "id": 7,
+                "email": "tester@example.com",
+                "role": "qa"
+            }
+        },
+        "ts": 1772976918539,
+        "date": "2026-03-08",
+        "datetime": "2026-03-08T13:35:18+00:00",
+        "project_id": "proj_abc123",
+        "environment": "testing",
+        "app": "php",
+        "framework": "php",
+        "host": "DESKTOP-COBARJ6",
+        "sdk_version": "1.0.0"
+    }
+]
