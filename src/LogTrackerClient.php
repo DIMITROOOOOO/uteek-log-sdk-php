@@ -7,7 +7,7 @@ use Throwable;
 
 class LogTrackerClient
 {
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.1.0';
 
     /** Minimum length enforced for API keys issued by the monitoring dashboard. */
     private const MIN_KEY_LENGTH = 16;
@@ -236,6 +236,10 @@ class LogTrackerClient
         $log['framework']   = $this->framework;
         $log['host']        = gethostname() ?: 'unknown';
         $log['sdk_version'] = self::VERSION;
+
+        if (!isset($log['stack_trace']) && $log['level'] !== 'INFO') {
+            $log['stack_trace'] = (new \Exception())->getTraceAsString();
+        }
 
         $log['context'] = array_merge(
             $log['context'] ?? [],
