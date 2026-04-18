@@ -7,7 +7,7 @@ use Throwable;
 
 class LogTrackerClient
 {
-    public const VERSION = '1.1.0';
+    public const VERSION = '1.2.0';
 
     /** Minimum length enforced for API keys issued by the monitoring dashboard. */
     private const MIN_KEY_LENGTH = 16;
@@ -49,7 +49,6 @@ class LogTrackerClient
             throw new Exception('LogTracker: api_key is required.');
         }
         if (strlen(trim($rawKey)) < self::MIN_KEY_LENGTH) {
-            // Give a hint without echoing the key value itself.
             throw new Exception(
                 'LogTracker: api_key appears invalid (too short). ' .
                 'Copy the key from your UTEEK monitoring dashboard.'
@@ -65,14 +64,17 @@ class LogTrackerClient
         $this->apiKey       = trim($rawKey);
         $this->projectId    = trim($rawProject);
         $this->environment  = $config['environment'] ?? 'production';
-        $this->maxBatchSize = (int)($config['batch_size'] ?? 50);
+        $this->maxBatchSize = max(1, (int)($config['batch_size'] ?? 50)); // Bug 7: clamp to minimum 1
         $this->framework    = $config['framework'] ?? $this->detectFramework();
         $this->debugMode    = (bool)($config['debug'] ?? false);
 
         $levels = $config['log_levels'] ?? array_keys(self::LEVEL_WEIGHTS);
         $this->enabledLevels = array_map('strtoupper', $levels);
 
-        register_shutdown_function([$this, 'flush']);
+        // Bug 6: only register shutdown flush for web requests, not long-lived CLI processes
+        if (PHP_SAPI !== 'cli') {
+            register_shutdown_function([$this, 'flush']);
+        }
     }
 
     // ─── User Context ─────────────────────────────────────────────────────────
@@ -124,10 +126,11 @@ class LogTrackerClient
 
     // ─── Logging Methods ──────────────────────────────────────────────────────
 
-    public function captureException(Throwable $e, array $context = []): void
+    // Bug 4: accept $level so callers can promote exceptions to CRITICAL
+    public function captureException(Throwable $e, array $context = [], string $level = 'ERROR'): void
     {
         $this->push([
-            'level'       => 'ERROR',
+            'level'       => strtoupper($level),
             'message'     => $e->getMessage(),
             'stack_trace' => $e->getTraceAsString(),
             'context'     => array_merge([
@@ -184,7 +187,9 @@ class LogTrackerClient
      */
     public function ping(): bool
     {
-        $pingUrl = str_replace('/ingest', '/ping', $this->apiUrl);
+        // Bug 2: build /ping URL by trimming /ingest suffix instead of str_replace
+        // to avoid corrupting URLs that contain "ingest" elsewhere (e.g. http://ingest.host/api/ingest)
+        $pingUrl = substr($this->apiUrl, 0, -strlen('/ingest')) . '/ping';
         $ch = curl_init($pingUrl);
         if ($ch === false) {
             return false;
@@ -201,9 +206,15 @@ class LogTrackerClient
             ],
         ]);
 
-        curl_exec($ch);
+        // Bug 2: check curl_errno so connection failures return false instead of silently passing
+        $result   = curl_exec($ch);
+        $curlErr  = curl_errno($ch);
         $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        if ($result === false || $curlErr !== 0) {
+            return false;
+        }
 
         if ($httpCode === 401 || $httpCode === 403) {
             $this->handleAuthFailure($httpCode);
@@ -217,7 +228,6 @@ class LogTrackerClient
 
     private function push(array $log): void
     {
-        // Stop accepting new logs if the API key was rejected by the backend.
         if ($this->disabled) {
             return;
         }
@@ -229,7 +239,7 @@ class LogTrackerClient
         $now                = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $log['ts']          = (int)(microtime(true) * 1000);
         $log['date']        = $now->format('Y-m-d');
-        $log['datetime']    = $now->format(\DateTimeInterface::ATOM); // e.g. 2026-03-08T14:32:01+00:00
+        $log['datetime']    = $now->format(\DateTimeInterface::ATOM);
         $log['project_id']  = $this->projectId;
         $log['environment'] = $this->environment;
         $log['app']         = 'php';
@@ -237,7 +247,8 @@ class LogTrackerClient
         $log['host']        = gethostname() ?: 'unknown';
         $log['sdk_version'] = self::VERSION;
 
-        if (!isset($log['stack_trace']) && $log['level'] !== 'INFO') {
+        // Bug 5: only auto-generate a stack trace for DEBUG; other levels get it from captureException
+        if (!isset($log['stack_trace']) && $log['level'] === 'DEBUG') {
             $log['stack_trace'] = (new \Exception())->getTraceAsString();
         }
 
@@ -321,7 +332,7 @@ class LogTrackerClient
 
     /**
      * Send all buffered logs to the Node.js backend and clear the buffer.
-     * Called automatically at shutdown via register_shutdown_function.
+     * Called automatically at shutdown via register_shutdown_function (web only).
      */
     public function flush(): void
     {
@@ -329,10 +340,10 @@ class LogTrackerClient
             return;
         }
 
-        $payload      = json_encode($this->buffer, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        $this->buffer = [];
+        $payload = json_encode($this->buffer, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
         if ($payload === false) {
+            $this->buffer = [];
             return;
         }
 
@@ -342,14 +353,18 @@ class LogTrackerClient
             fastcgi_finish_request();
         }
 
-        $this->send($payload);
+        // Bug 3: only clear buffer after a confirmed successful send
+        if ($this->send($payload)) {
+            $this->buffer = [];
+        }
     }
 
-    private function send(string $payload): void
+    // Bug 1 & 3: returns true on success so flush() knows whether to clear the buffer
+    private function send(string $payload): bool
     {
         $ch = curl_init($this->apiUrl);
         if ($ch === false) {
-            return;
+            return false;
         }
 
         curl_setopt_array($ch, [
@@ -360,19 +375,30 @@ class LogTrackerClient
             CURLOPT_CONNECTTIMEOUT => 3,
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/json',
-                // The API key is sent only in a request header, never in the URL or body.
                 'X-API-Key: ' . $this->apiKey,
                 'X-SDK-Version: ' . self::VERSION,
             ],
         ]);
 
-        curl_exec($ch);
+        // Bug 1: check curl_errno so connection failures (refused, timeout, DNS) are detected
+        $result   = curl_exec($ch);
+        $curlErr  = curl_errno($ch);
         $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
+        if ($result === false || $curlErr !== 0) {
+            if ($this->debugMode) {
+                error_log('LogTracker: could not reach ingest server (cURL #' . $curlErr . ')');
+            }
+            return false;
+        }
+
         if ($httpCode === 401 || $httpCode === 403) {
             $this->handleAuthFailure($httpCode);
+            return false;
         }
+
+        return $httpCode >= 200 && $httpCode < 300;
     }
 
     /**
@@ -383,7 +409,7 @@ class LogTrackerClient
     private function handleAuthFailure(int $httpCode): void
     {
         $this->disabled = true;
-        $this->buffer   = []; // discard any buffered data
+        $this->buffer   = [];
 
         $message = sprintf(
             'LogTracker: API key rejected by the ingest server (HTTP %d). ' .
@@ -395,8 +421,6 @@ class LogTrackerClient
             throw new Exception($message);
         }
 
-        // In production, write a single line to the PHP error log so the
-        // problem is visible without crashing the application.
         error_log($message);
     }
 }
