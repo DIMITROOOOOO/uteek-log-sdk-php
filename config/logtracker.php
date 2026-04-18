@@ -13,9 +13,10 @@ return [
     | API Connection
     |--------------------------------------------------------------------------
     */
-    'api_url'    => env('LOGTRACKER_API_URL', 'http://localhost:3000'),
-    'project_id' => env('LOGTRACKER_PROJECT_ID'),
-    'api_key'    => env('LOGTRACKER_API_KEY'),
+    'api_url'      => env('LOGTRACKER_API_URL', 'http://localhost:3000'),
+    'project_id'   => env('LOGTRACKER_PROJECT_ID'),
+    'project_name' => env('LOGTRACKER_PROJECT_NAME'),
+    'api_key'      => env('LOGTRACKER_API_KEY'),
 
     /*
     |--------------------------------------------------------------------------

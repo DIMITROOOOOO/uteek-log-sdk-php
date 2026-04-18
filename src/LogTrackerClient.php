@@ -7,7 +7,7 @@ use Throwable;
 
 class LogTrackerClient
 {
-    public const VERSION = '1.2.0';
+    public const VERSION = '1.3.0';
 
     /** Minimum length enforced for API keys issued by the monitoring dashboard. */
     private const MIN_KEY_LENGTH = 16;
@@ -23,6 +23,7 @@ class LogTrackerClient
     private string $apiUrl;
     private string $apiKey;
     private string $projectId;
+    private string $projectName;
     private string $environment;
     private string $framework;
     private array $enabledLevels;
@@ -55,14 +56,18 @@ class LogTrackerClient
             );
         }
 
-        $rawProject = $config['project_id'] ?? null;
-        if (!is_string($rawProject) || trim($rawProject) === '') {
-            throw new Exception('LogTracker: project_id is required.');
+        $rawProject     = $config['project_id']   ?? null;
+        $rawProjectName = $config['project_name'] ?? null;
+
+        if ((!is_string($rawProject) || trim($rawProject) === '') &&
+            (!is_string($rawProjectName) || trim($rawProjectName) === '')) {
+            throw new Exception('LogTracker: project_id or project_name is required.');
         }
 
         $this->apiUrl       = rtrim($config['api_url'] ?? 'http://localhost:3000', '/') . '/ingest';
         $this->apiKey       = trim($rawKey);
-        $this->projectId    = trim($rawProject);
+        $this->projectId    = is_string($rawProject) ? trim($rawProject) : '';
+        $this->projectName  = is_string($rawProjectName) ? trim($rawProjectName) : '';
         $this->environment  = $config['environment'] ?? 'production';
         $this->maxBatchSize = max(1, (int)($config['batch_size'] ?? 50)); // Bug 7: clamp to minimum 1
         $this->framework    = $config['framework'] ?? $this->detectFramework();
@@ -240,8 +245,9 @@ class LogTrackerClient
         $log['ts']          = (int)(microtime(true) * 1000);
         $log['date']        = $now->format('Y-m-d');
         $log['datetime']    = $now->format(\DateTimeInterface::ATOM);
-        $log['project_id']  = $this->projectId;
-        $log['environment'] = $this->environment;
+        $log['project_id']   = $this->projectId;
+        $log['project_name'] = $this->projectName;
+        $log['environment']  = $this->environment;
         $log['app']         = 'php';
         $log['framework']   = $this->framework;
         $log['host']        = gethostname() ?: 'unknown';
